@@ -8,11 +8,11 @@ export function getNote({
   id,
   userId,
 }: Pick<Note, 'id'> & {
-  userId: User['id']
+  userId?: User['id']
 }) {
   return prisma.note.findFirst({
     select: { id: true, body: true, title: true },
-    where: { id, userId },
+    where: userId ? { id, userId } : { id },
   })
 }
 
@@ -22,6 +22,15 @@ export function getNoteListItems({ userId }: { userId: User['id'] }) {
     select: { id: true, title: true },
     orderBy: { updatedAt: 'desc' },
   })
+}
+
+export function getNoteListItemsByEmail({ email }: { email: User['email'] }) {
+  return prisma.user.findUnique({
+    where: { email },
+    include: {
+      notes: true,
+    }
+  }).then((result) => (result && result.notes) || [])
 }
 
 export function createNote({

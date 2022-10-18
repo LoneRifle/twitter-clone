@@ -40,19 +40,19 @@ Click this button to create a [Gitpod](https://gitpod.io) workspace with the pro
   npx remix init
   ```
 
-- Start the Postgres Database in [Docker](https://www.docker.com/get-started):
+- Run the Postgres Database in [Docker](https://www.docker.com/get-started):
 
   ```sh
-  npm run docker
+  npm run dev:docker
   ```
 
-  > **Note:** The npm script will complete while Docker sets up the container in the background. Ensure that Docker has finished and your container is running before proceeding.
-
-- Initial setup:
+- In another terminal, run initial setup:
 
   ```sh
   npm run setup
   ```
+
+- Press Ctrl-C to interrupt the terminal running `npm run dev:docker`
 
 - Run the first build:
 
