@@ -1,4 +1,4 @@
-app = "majulah-b98d"
+app = "wog-twitter"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = [ ]
