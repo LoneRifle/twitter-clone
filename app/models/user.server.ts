@@ -13,6 +13,48 @@ export async function getUserByEmail(email: User['email']) {
   return prisma.user.findUnique({ where: { email } })
 }
 
+export async function isFollowing(id: User['id'], emailToFollow: User['email']) {
+  const follower = await prisma.user.findUnique({ 
+    where: { id },
+    include: {
+      following: true,
+    }
+  })
+  if (!follower) {
+    throw new Error(`Cannot find user ${id}`)
+  }
+  const user = await getUserByEmail(emailToFollow) 
+  if (!user) {
+    throw new Error(`Cannot find ${emailToFollow}`)
+  }
+  return follower.following.some(f => f.userId === user.id)
+}
+
+export async function followUser(id: User['id'], emailToFollow: User['email']) {
+  const user = await getUserByEmail(emailToFollow)
+  if (!user) {
+    throw new Error(`Cannot follow ${emailToFollow} - not found`)
+  }
+  return prisma.follower.create({
+    data: {
+      userId: user.id, followerId: id
+    }
+  })
+}
+
+export async function unfollowUser(id: User['id'], emailToFollow: User['email']) {
+  const user = await getUserByEmail(emailToFollow)
+  if (!user) {
+    throw new Error(`Cannot unfollow ${emailToFollow} - not found`)
+  }
+  return prisma.follower.deleteMany({
+    where: {
+      followerId: id,
+      userId: user.id,
+    }
+  })
+}
+
 export async function createUser(email: User['email'], password: string) {
   const hashedPassword = await bcrypt.hash(password, 10)
 
