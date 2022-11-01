@@ -13,6 +13,20 @@ export async function getUserByEmail(email: User['email']) {
   return prisma.user.findUnique({ where: { email } })
 }
 
+export async function getFollowingsByUserId(id: User['id']) {
+  const user = await prisma.user.findUnique({ 
+    where: { id },
+    include: {
+      following: {
+        include: {
+          user: true,
+        }
+      },
+    }
+  })
+  return user?.following
+}
+
 export async function isFollowing(id: User['id'], emailToFollow: User['email']) {
   const follower = await prisma.user.findUnique({ 
     where: { id },
