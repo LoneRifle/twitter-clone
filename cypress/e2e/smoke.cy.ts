@@ -30,9 +30,8 @@ describe('smoke tests', () => {
       body: faker.lorem.sentences(1),
     }
     cy.login()
-    cy.visitAndCheck('/')
+    cy.visitAndCheck('/notes')
 
-    cy.findByRole('link', { name: /notes/i }).click()
     cy.findByText('No notes yet')
 
     cy.findByRole('link', { name: /\+ new note/i }).click()
